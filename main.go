@@ -30,7 +30,7 @@ func (c *ContaCorrente) Depositar(valorDeposito float64) (string, float64) {
 }
 
 func (c *ContaCorrente) ransferir(valorTransferencia float64, contaDestino *ContaCorrente) bool {
-	if valorTransferencia < c.saldo {
+	if valorTransferencia < c.saldo && valorTransferencia > 0 {
 		c.saldo -= valorTransferencia
 		contaDestino.Depositar(valorTransferencia)
 		return true
