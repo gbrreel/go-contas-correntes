@@ -1,49 +1,23 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
 
-type ContaCorrente struct {
-	titular       string
-	numeroAgencia int
-	numeroConta   int
-	saldo         float64
-}
-
-func (c *ContaCorrente) Sacar(valorSaque float64) string {
-	podeSacar := valorSaque > 0 && valorSaque <= c.saldo
-	if podeSacar {
-		c.saldo -= valorSaque
-		return "Saque realizado com sucesso"
-	} else {
-		return "Saldo insuficiente"
-	}
-}
-
-func (c *ContaCorrente) Depositar(valorDeposito float64) (string, float64) {
-	if valorDeposito < 0 {
-		c.saldo += valorDeposito
-		return "Valor de depósito inválido", c.saldo
-	} else {
-		c.saldo += valorDeposito
-		return "Depósito realizado com sucesso", c.saldo
-	}
-}
-
-func (c *ContaCorrente) ransferir(valorTransferencia float64, contaDestino *ContaCorrente) bool {
-	if valorTransferencia < c.saldo && valorTransferencia > 0 {
-		c.saldo -= valorTransferencia
-		contaDestino.Depositar(valorTransferencia)
-		return true
-	} else {
-		return false
-	}
-}
+	"go-contas-correntes/clientes"
+	"go-contas-correntes/contas"
+)
 
 func main() {
-	contaSilva := ContaCorrente{titular: "Silva", saldo: 300}
-	contaGallo := ContaCorrente{titular: "Gallo", saldo: 500}
+	contaSilva := contas.ContaCorrente{
+		Titular: clientes.Titular{Nome: "Silva", CPF: "000.000.000-00", Profissao: "Analista"},
+		Saldo:   300,
+	}
+	contaGallo := contas.ContaCorrente{
+		Titular: clientes.Titular{Nome: "Gallo", CPF: "111.111.111-11", Profissao: "Dev"},
+		Saldo:   500,
+	}
 
-	status := contaSilva.ransferir(200, &contaGallo)
+	status := contaSilva.Transferir(200, &contaGallo)
 
 	fmt.Println(status)
 
